@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dora Bolos — Bolo artesanal por encomenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ganache:#2B1B14;
+    --ganache-2:#3B241A;
+    --cream:#FFF8EF;
+    --frosting:#E8A9A0;
+    --butter:#D9A441;
+    --pistache:#7E9268;
+    --ink:#2B1B14;
+    --line: rgba(255,248,239,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Manrope',sans-serif;
+    overflow-x:hidden;
+  }
+  a{text-decoration:none;color:inherit;}
+  .eyebrow{
+    font-family:'Manrope',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:.72rem;
+    font-weight:700;
+  }
+
+  /* ---------- scalloped divider (signature element) ---------- */
+  .scallop{
+    width:100%;
+    height:34px;
+    display:block;
+    line-height:0;
+  }
+  .scallop svg{width:100%;height:100%;display:block;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);
+    background:rgba(43,27,20,0.0);
+    transition:background .3s ease, padding .3s ease;
+  }
+  header.scrolled{
+    background:rgba(43,27,20,0.92);
+    backdrop-filter:blur(6px);
+    padding:14px clamp(20px,5vw,64px);
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:1.35rem;
+    color:var(--cream);
+    letter-spacing:.01em;
+  }
+  .logo em{font-style:italic;color:var(--frosting);}
+  .nav-cta{
+    background:var(--frosting);
+    color:var(--ganache);
+    padding:10px 22px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.85rem;
+    transition:transform .25s ease, box-shadow .25s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(232,169,160,0.35);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:radial-gradient(120% 140% at 80% 0%, var(--ganache-2) 0%, var(--ganache) 55%);
+    color:var(--cream);
+    padding:150px clamp(20px,6vw,80px) 90px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:center;
+    min-height:92vh;
+  }
+  .hero-copy .eyebrow{color:var(--frosting);}
+  .hero-copy h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(2.4rem,5.2vw,4.2rem);
+    line-height:1.04;
+    margin:18px 0 22px;
+    max-width:15ch;
+  }
+  .hero-copy h1 .script{
+    font-style:italic;
+    font-weight:500;
+    color:var(--butter);
+  }
+  .hero-copy p{
+    font-size:1.08rem;
+    line-height:1.6;
+    color:rgba(255,248,239,0.82);
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .cta-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+  .btn-primary{
+    background:var(--butter);
+    color:var(--ganache);
+    padding:16px 30px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.98rem;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(217,164,65,0.32);}
+  .btn-ghost{
+    color:var(--cream);
+    font-weight:600;
+    font-size:.95rem;
+    border-bottom:1px solid rgba(255,248,239,0.4);
+    padding-bottom:3px;
+    transition:border-color .2s ease, opacity .2s ease;
+  }
+  .btn-ghost:hover{border-color:var(--frosting);}
+  .hero-note{
+    margin-top:26px;
+    font-size:.82rem;
+    color:rgba(255,248,239,0.55);
+    display:flex;align-items:center;gap:8px;
+  }
+  .hero-note::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--frosting);flex-shrink:0;}
+
+  /* ---------- HERO CAKE ILLUSTRATION ---------- */
+  .cake-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .cake-wrap svg{
+    width:100%;
+    max-width:420px;
+    height:auto;
+    filter:drop-shadow(0 30px 40px rgba(0,0,0,0.35));
+  }
+  .piping{
+    stroke-dasharray:900;
+    stroke-dashoffset:900;
+    animation:draw 2.6s ease forwards .3s;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .rise{
+    opacity:0; transform:translateY(16px);
+    animation:rise .8s ease forwards;
+  }
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- TRUST BAR ---------- */
+  .trust{
+    background:var(--cream);
+    padding:44px clamp(20px,6vw,80px);
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    justify-content:space-between;
+    border-bottom:1px solid rgba(43,27,20,0.08);
+  }
+  .trust-item{flex:1;min-width:180px;}
+  .trust-item .num{
+    font-family:'Fraunces',serif;
+    font-size:2.1rem;
+    font-weight:600;
+    color:var(--ganache);
+    display:block;
+  }
+  .trust-item .label{
+    font-size:.86rem;
+    color:rgba(43,27,20,0.65);
+    margin-top:2px;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:100px clamp(20px,6vw,80px);}
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head .eyebrow{color:var(--pistache);}
+  .section-head h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(1.9rem,3.4vw,2.7rem);
+    margin-top:14px;
+    line-height:1.15;
+  }
+  .section-head p{
+    margin-top:16px;
+    font-size:1.02rem;
+    line-height:1.6;
+    color:rgba(43,27,20,0.72);
+  }
+
+  /* ---------- COMO FUNCIONA (steps) ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+  }
+  .step{
+    background:var(--cream);
+    border:1px solid rgba(43,27,20,0.1);
+    border-radius:22px;
+    padding:34px 28px;
+    position:relative;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .step:hover{transform:translateY(-6px);box-shadow:0 20px 34px rgba(43,27,20,0.1);}
+  .step .step-num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1rem;
+    color:var(--frosting);
+    background:var(--ganache);
+    width:34px;height:34px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;
+  }
+  .step h3{font-family:'Fraunces',serif;font-size:1.22rem;font-weight:600;margin-bottom:10px;}
+  .step p{font-size:.94rem;color:rgba(43,27,20,0.68);line-height:1.55;}
+
+  /* ---------- SABORES ---------- */
+  .flavors-section{background:var(--ganache-2);color:var(--cream);}
+  .flavors-section .section-head p{color:rgba(255,248,239,0.75);}
+  .flavors-section .eyebrow{color:var(--frosting);}
+  .flavor-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  .flavor-card{
+    background:rgba(255,248,239,0.05);
+    border:1px solid rgba(255,248,239,0.14);
+    border-radius:18px;
+    padding:26px 20px;
+    text-align:center;
+    transition:transform .3s ease, background .3s ease;
+  }
+  .flavor-card:hover{transform:translateY(-5px);background:rgba(255,248,239,0.09);}
+  .flavor-card .slice{margin:0 auto 14px;width:46px;height:46px;}
+  .flavor-card h4{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;margin-bottom:6px;}
+  .flavor-card span{font-size:.82rem;color:rgba(255,248,239,0.6);}
+
+  /* ---------- POR QUE / VALUE PROPS ---------- */
+  .why{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .why-list{list-style:none;display:flex;flex-direction:column;gap:26px;}
+  .why-list li{display:flex;gap:18px;align-items:flex-start;}
+  .why-list .icon{
+    width:42px;height:42px;flex-shrink:0;
+    border-radius:50%;
+    background:var(--frosting);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ganache);
+  }
+  .why-list h4{font-family:'Fraunces',serif;font-weight:600;font-size:1.1rem;margin-bottom:4px;}
+  .why-list p{font-size:.92rem;color:rgba(43,27,20,0.68);line-height:1.5;}
+  .why-visual{
+    background:var(--cream);
+    border:1px solid rgba(43,27,20,0.1);
+    border-radius:26px;
+    padding:44px 36px;
+    position:relative;
+  }
+  .why-visual .quote-mark{
+    font-family:'Fraunces',serif;
+    font-size:4rem;
+    color:var(--frosting);
+    line-height:.6;
+  }
+  .why-visual p{
+    font-family:'Fraunces',serif;
+    font-size:1.35rem;
+    font-style:italic;
+    line-height:1.45;
+    margin:16px 0 24px;
+    color:var(--ganache);
+  }
+  .why-visual .sig{
+    font-size:.85rem;
+    color:rgba(43,27,20,0.6);
+    font-weight:600;
+  }
+
+  /* ---------- FINAL CTA ---------- */
+  .final-cta{
+    background:var(--ganache);
+    color:var(--cream);
+    text-align:center;
+    padding:110px clamp(20px,6vw,80px);
+  }
+  .final-cta .eyebrow{color:var(--frosting);}
+  .final-cta h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(2rem,4.6vw,3.4rem);
+    max-width:16ch;
+    margin:16px auto 20px;
+    line-height:1.12;
+  }
+  .final-cta p{
+    max-width:44ch;
+    margin:0 auto 40px;
+    color:rgba(255,248,239,0.75);
+    font-size:1.02rem;
+    line-height:1.6;
+  }
+  .final-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ganache);
+    border-top:1px solid var(--line);
+    padding:38px clamp(20px,6vw,80px) 46px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:20px;
+    color:rgba(255,248,239,0.6);
+    font-size:.85rem;
+  }
+  footer .logo{font-size:1.1rem;}
+  footer .foot-links{display:flex;gap:24px;flex-wrap:wrap;}
+  footer .foot-links a{transition:color .2s ease;}
+  footer .foot-links a:hover{color:var(--frosting);}
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .piping{animation:none;stroke-dashoffset:0;}
+    .rise{animation:none;opacity:1;transform:none;}
+    .reveal{transition:none;opacity:1;transform:none;}
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:920px){
+    .hero{grid-template-columns:1fr;padding-top:130px;}
+    .cake-wrap{order:-1;}
+    .steps{grid-template-columns:1fr;}
+    .flavor-grid{grid-template-columns:repeat(2,1fr);}
+    .why{grid-template-columns:1fr;}
+    .trust{gap:22px;}
+  }
+  @media (max-width:520px){
+    .flavor-grid{grid-template-columns:1fr 1fr;}
+    section{padding:70px 20px;}
+    .final-cta{padding:80px 20px;}
+  }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--butter);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SCALLOP DEFINITION (reused) ============ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="scallop-shape" viewBox="0 0 200 20" preserveAspectRatio="none">
+      <path d="M0,0 L0,10 Q5,20 10,10 Q15,0 20,10 Q25,20 30,10 Q35,0 40,10 Q45,20 50,10 Q55,0 60,10 Q65,20 70,10 Q75,0 80,10 Q85,20 90,10 Q95,0 100,10 Q105,20 110,10 Q115,0 120,10 Q125,20 130,10 Q135,0 140,10 Q145,20 150,10 Q155,0 160,10 Q165,20 170,10 Q175,0 180,10 Q185,20 190,10 Q195,0 200,10 L200,0 Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header id="siteHeader">
+  <a href="#top" class="logo">Dora <em>Bolos</em></a>
+  <a class="nav-cta" href="https://www.instagram.com/doorabolos" target="_blank" rel="noopener">Pedir agora</a>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero" id="top">
+  <div class="hero-copy">
+    <span class="eyebrow">Confeitaria artesanal · desde antes de 2005</span>
+    <h1>Bolo de verdade,<br>feito <span class="script">à mão</span>,<br>só quando é seu.</h1>
+    <p>Há mais de 20 anos, cada bolo que sai da nossa cozinha nasce de uma encomenda — nunca de uma prateleira. Recheios de verdade, ponto certo de doçura e o cuidado de quem faz um de cada vez.</p>
+    <div class="cta-row">
+      <a class="btn-primary" href="https://www.instagram.com/doorabolos" target="_blank" rel="noopener">
+        Chamar no Instagram →
+      </a>
+      <a class="btn-ghost" href="tel:+551125462600">Ligar: (11) 2546-2600</a>
+    </div>
+    <div class="hero-note">Encomendas com antecedência — sem loja física, sem prateleira, sem pressa na receita.</div>
+  </div>
+
+  <div class="cake-wrap">
+    <svg viewBox="0 0 300 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="150" cy="300" rx="118" ry="16" fill="#000" opacity="0.18"/>
+      <!-- base tier -->
+      <rect x="45" y="220" width="210" height="66" rx="8" fill="#F6E7C9"/>
+      <rect x="45" y="220" width="210" height="66" rx="8" stroke="#2B1B14" stroke-opacity="0.08"/>
+      <!-- middle tier -->
+      <rect x="70" y="150" width="160" height="70" rx="8" fill="#F3D9DC"/>
+      <!-- top tier -->
+      <rect x="95" y="86" width="110" height="64" rx="8" fill="#FFF8EF"/>
+      <!-- piped icing borders (signature animated element) -->
+      <path class="piping rise" d="M45,222 Q60,236 75,222 Q90,208 105,222 Q120,236 135,222 Q150,208 165,222 Q180,236 195,222 Q210,208 225,222 Q240,236 255,222" stroke="#E8A9A0" stroke-width="6" stroke-linecap="round"/>
+      <path class="piping rise" d="M70,152 Q83,164 96,152 Q109,140 122,152 Q135,164 148,152 Q161,140 174,152 Q187,164 200,152 Q213,140 226,152" stroke="#D9A441" stroke-width="6" stroke-linecap="round"/>
+      <path class="piping rise" d="M95,88 Q106,98 117,88 Q128,78 139,88 Q150,98 161,88 Q172,78 183,88 Q194,98 205,88" stroke="#7E9268" stroke-width="6" stroke-linecap="round"/>
+      <!-- candle -->
+      <rect x="145" y="55" width="10" height="34" rx="3" fill="#E8A9A0"/>
+      <path d="M150,30 C144,40 144,46 150,54 C156,46 156,40 150,30Z" fill="#D9A441" class="rise" style="animation-delay:1.4s"/>
+    </svg>
+  </div>
+</div>
+
+<div class="scallop"><svg viewBox="0 0 200 20" preserveAspectRatio="none"><use href="#scallop-shape" fill="#FFF8EF"/></svg></div>
+
+<!-- ============ TRUST BAR ============ -->
+<div class="trust">
+  <div class="trust-item">
+    <span class="num">20+</span>
+    <span class="label">anos fazendo bolo de encomenda</span>
+  </div>
+  <div class="trust-item">
+    <span class="num">100%</span>
+    <span class="label">feitos por encomenda, nunca de estoque</span>
+  </div>
+  <div class="trust-item">
+    <span class="num">1 a 1</span>
+    <span class="label">atendimento direto, sem intermediário</span>
+  </div>
+  <div class="trust-item">
+    <span class="num">São Paulo</span>
+    <span class="label">retirada e combinação de entrega</span>
+  </div>
+</div>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section id="como-funciona">
+  <div class="section-head reveal">
+    <span class="eyebrow">Como funciona</span>
+    <h2>Do primeiro "oi" ao bolo na mesa.</h2>
+    <p>Como cada bolo é feito sob encomenda, o processo é simples e direto — só peça com um pouco de antecedência para garantir seu horário na agenda.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Você chama</h3>
+      <p>Manda mensagem pelo Instagram ou liga contando a ocasião: aniversário, casamento, comemoração ou só vontade de bolo bom.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">2</div>
+      <h3>Combinamos os detalhes</h3>
+      <p>Sabor, tamanho, recheio e data de retirada — tudo alinhado com você antes de qualquer coisa ir ao forno.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">3</div>
+      <h3>Seu bolo fica pronto</h3>
+      <p>Feito na data combinada, fresco, do jeito que foi pedido. Sem prateleira, sem estoque parado.</p>
+    </div>
+  </div>
+</section>
+
+<div class="scallop"><svg viewBox="0 0 200 20" preserveAspectRatio="none"><use href="#scallop-shape" fill="#3B241A"/></svg></div>
+
+<!-- ============ SABORES ============ -->
+<section class="flavors-section" id="sabores">
+  <div class="section-head reveal">
+    <span class="eyebrow">Sabores</span>
+    <h2>Clássicos que não erram, do jeito que a casa faz.</h2>
+    <p>Cada sabor pode virar recheio, cobertura ou massa — a combinação final é sempre conversada com você na hora do pedido.</p>
+  </div>
+  <div class="flavor-grid">
+    <div class="flavor-card reveal">
+      <svg class="slice" viewBox="0 0 48 48"><path d="M24 6 L42 40 L6 40 Z" fill="#E8A9A0"/><path d="M10 40 Q24 34 38 40" stroke="#2B1B14" stroke-opacity="0.3" fill="none" stroke-width="2"/></svg>
+      <h4>Chocolate</h4>
+      <span>meio amargo ou ao leite</span>
+    </div>
+    <div class="flavor-card reveal">
+      <svg class="slice" viewBox="0 0 48 48"><path d="M24 6 L42 40 L6 40 Z" fill="#D9A441"/><path d="M10 40 Q24 34 38 40" stroke="#2B1B14" stroke-opacity="0.3" fill="none" stroke-width="2"/></svg>
+      <h4>Prestígio</h4>
+      <span>coco e chocolate</span>
+    </div>
+    <div class="flavor-card reveal">
+      <svg class="slice" viewBox="0 0 48 48"><path d="M24 6 L42 40 L6 40 Z" fill="#F3D9DC"/><path d="M10 40 Q24 34 38 40" stroke="#2B1B14" stroke-opacity="0.3" fill="none" stroke-width="2"/></svg>
+      <h4>Ninho com morango</h4>
+      <span>cremoso, clássico</span>
+    </div>
+    <div class="flavor-card reveal">
+      <svg class="slice" viewBox="0 0 48 48"><path d="M24 6 L42 40 L6 40 Z" fill="#7E9268"/><path d="M10 40 Q24 34 38 40" stroke="#2B1B14" stroke-opacity="0.3" fill="none" stroke-width="2"/></svg>
+      <h4>Nozes e especiais</h4>
+      <span>sob consulta</span>
+    </div>
+  </div>
+</section>
+
+<div class="scallop"><svg viewBox="0 0 200 20" preserveAspectRatio="none"><use href="#scallop-shape" fill="#FFF8EF"/></svg></div>
+
+<!-- ============ POR QUE / VALUE PROPS ============ -->
+<section id="por-que">
+  <div class="why">
+    <ul class="why-list">
+      <li class="reveal">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <h4>Feito por encomenda, sempre</h4>
+          <p>Sem geladeira de exposição, sem bolo esperando comprador. O seu começa a existir quando você pede.</p>
+        </div>
+      </li>
+      <li class="reveal">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <h4>Mais de 20 anos de prática</h4>
+          <p>Ponto de forno, textura de recheio e equilíbrio de doçura que só vêm de repetir a receita por décadas.</p>
+        </div>
+      </li>
+      <li class="reveal">
+        <div class="icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <h4>Atendimento direto</h4>
+          <p>Você combina cada detalhe com quem vai fazer o bolo — sem central de atendimento, sem resposta automática.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="why-visual reveal">
+      <span class="quote-mark">"</span>
+      <p>Um bolo bom não se compra pronto — se combina antes e se prova depois.</p>
+      <span class="sig">— o jeito Dora Bolos de trabalhar</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta" id="pedir">
+  <span class="eyebrow">Vamos combinar o seu bolo?</span>
+  <h2>Conta pra gente a data e a ocasião.</h2>
+  <p>Encomendas são feitas com antecedência para garantir horário na agenda. Chame agora e já adianta a data que precisa.</p>
+  <div class="final-btns">
+    <a class="btn-primary" href="https://www.instagram.com/doorabolos" target="_blank" rel="noopener">Chamar no Instagram →</a>
+    <a class=
